@@ -1,15 +1,41 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script src="./script.js" type="module"></script>
-		<link rel="stylesheet" href="./style.css" />
-		<title>💬 ChatJS</title>
-	</head>
-	<body>
-		<main>
-			<!-- TODO: Implement Me! -->
-		</main>
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="./script.js" type="module"></script>
+        <link rel="stylesheet" href="./style.css" />
+        <title>💬 ChatJS</title>
+    </head>
+    <body>
+        <main class="chat-bot">
+            <header class="chat-header">
+                <h1>Chat Bot</h1>
+                <p class="subtitle">A Simple Chat Bot</p>
+            </header>
+
+            <section class="main-chat">
+                <section
+                    id="chat-area"
+                    class="chat-area"
+                    aria-label="Messages..."
+                >
+                    <div class="bot">Type a Message!</div>
+                </section>
+
+                <form class="chat-form" id="chat-form">
+                    <div>
+                        <label for="user-input">Your Input:</label>
+                        <input
+                            type="text"
+                            id="user-input"
+                            placeholder="Type here..."
+                        />
+                    </div>
+                    <button id="send-butt" type="submit">Send</button>
+                    <button id="reset-butt" type="reset">Reset Chat</button>
+                </form>
+            </section>
+        </main>
+    </body>
 </html>

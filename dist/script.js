@@ -1,68 +1,55 @@
-type Message = { role: string; content: string };
-
-let currentChat: { messages: Message[] } = { messages: [] };
-
+var currentChat = { messages: [] };
 /**
  * Simulates a bot response to a user message
  * @param {string} userMessage - The user's message
  * @returns {string} - The bot's response
  */
-function simulateBotResponse(userMessage: Message['content']) {
+function simulateBotResponse(userMessage) {
     // Simulate bot response with a delay
-    setTimeout(() => {
-        const botReply: string = `You said: "${userMessage}"`;
+    setTimeout(function () {
+        var botReply = 'You said: "'.concat(userMessage, '"');
         sendMessage('Echo', botReply);
     }, 500);
 }
-
 /**
  * Sends a message in the current chat
  * @param {string} role - The role of the message sender ('User' or 'Echo')
  * @param {string} message - The message content
  */
-function sendMessage(role: string, message: string) {
+function sendMessage(role, message) {
     //dont create if empty
     if (message.length === 0) return;
-
     //trim if too long
-    const trimmed = message.length > 500 ? message.slice(0, 500) : message;
-
-    currentChat.messages.push({ role, content: trimmed });
-
+    var trimmed = message.length > 500 ? message.slice(0, 500) : message;
+    currentChat.messages.push({ role: role, content: trimmed });
     //add storage
     saveChat();
     renderMessages(currentChat.messages);
 }
-
 /**
  * Renders the messages in the chat current selected
  * @param {{role: string, content: string}[]} messages - The messages to render
  */
-function renderMessages(messages: Message[]) {
-    const chatArea = document.getElementById('chat-area');
+function renderMessages(messages) {
+    var chatArea = document.getElementById('chat-area');
     if (!chatArea) throw new Error('Cant find chat area id ');
-
     //clear
     chatArea.innerHTML = '';
-
-    for (const message of messages) {
-        const textBubble = document.createElement('div');
+    for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
+        var message = messages_1[_i];
+        var textBubble = document.createElement('div');
         textBubble.classList.add('message');
-
         if (message.role === 'User') {
             textBubble.classList.add('user');
         } else {
             textBubble.classList.add('echo');
         }
-
         textBubble.textContent = message.content;
         chatArea.appendChild(textBubble);
     }
-
     //scroll down
     chatArea.scrollTop = chatArea.scrollHeight;
 }
-
 /**
  * Creates a new chat
  * @requirements
@@ -75,37 +62,29 @@ function createNewChat() {
     saveChat();
     //add storage
     renderMessages(currentChat.messages);
-
     //finish
-    const input = document.getElementById(
-        'user-input',
-    ) as HTMLInputElement | null;
+    var input = document.getElementById('user-input');
     if (!input) throw new Error('input error');
-
     input.value = '';
     saveChat();
 }
-
 //storage
 function saveChat() {
     localStorage.setItem('chat_key', JSON.stringify(currentChat));
 }
-
-function loadChat(): { messages: Message[] } | null {
-    const loaded = localStorage.getItem('chat_key');
+function loadChat() {
+    var loaded = localStorage.getItem('chat_key');
     if (!loaded) return null;
-
     try {
-        const parsedLoad = JSON.parse(loaded) as unknown;
+        var parsedLoad = JSON.parse(loaded);
         if (parsedLoad !== null) {
-            return parsedLoad as { messages: Message[] };
+            return parsedLoad;
         }
         return null;
-    } catch {
+    } catch (_a) {
         return null;
     }
 }
-
 /**
  * Initializes the app
  * @requirements
@@ -114,65 +93,44 @@ function loadChat(): { messages: Message[] } | null {
  * - If no chat exists, create a new chat
  */
 function initializeApp() {
-    const storedChat = loadChat();
-
+    var storedChat = loadChat();
     if (storedChat) {
         currentChat = storedChat;
         renderMessages(currentChat.messages);
     } else {
         createNewChat();
     }
-
-    const input = document.getElementById(
-        'user-input',
-    ) as HTMLInputElement | null;
+    var input = document.getElementById('user-input');
     if (!input) throw new Error('input error');
-
     input.addEventListener('input', disableSend);
     disableSend();
-
-    const resetButt = document.getElementById(
-        'reset-butt',
-    ) as HTMLButtonElement | null;
+    var resetButt = document.getElementById('reset-butt');
     if (!resetButt) throw new Error('rest error');
-
-    resetButt.addEventListener('click', (x) => {
+    resetButt.addEventListener('click', function (x) {
         x.preventDefault();
         createNewChat();
     });
-
-    const form = document.getElementById('chat-form') as HTMLFormElement | null;
+    var form = document.getElementById('chat-form');
     if (!form) throw new Error('form error');
-
-    form.addEventListener('submit', (x) => {
+    form.addEventListener('submit', function (x) {
         x.preventDefault();
-        const textInput = input.value.trim();
+        var textInput = input.value.trim();
         if (textInput.length === 0) return;
-
         sendMessage('User', textInput);
         input.value = '';
         disableSend();
-
         simulateBotResponse(textInput);
     });
 }
-
 function disableSend() {
-    const input = document.getElementById(
-        'user-input',
-    ) as HTMLInputElement | null;
+    var input = document.getElementById('user-input');
     if (!input) throw new Error('input error');
-    const sendButt = document.getElementById(
-        'send-butt',
-    ) as HTMLButtonElement | null;
+    var sendButt = document.getElementById('send-butt');
     if (!sendButt) throw new Error('send error');
-
     sendButt.disabled = input.value.trim().length === 0;
 }
-
 // TODO: Create an event listener to reset the chat messages when the "New Chat" button is clicked
-
 // TODO: Create an event listener to handle sending messages when the user submits the chat input form
-
 // Initialize the app upon reload
 initializeApp();
+export {};
